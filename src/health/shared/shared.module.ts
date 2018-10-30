@@ -1,20 +1,31 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {Router, Routes} from '@angular/router';
+import { NgModule, ModuleWithProviders } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Router, Routes, RouterModule } from "@angular/router";
 
-import { AngularFireDatabaseModule} from 'angularfire2/database';
+import { AngularFireDatabaseModule } from "angularfire2/database";
 
-import {MealsService} from './services/meals/meals.service';
+import { MealsService } from "./services/meals/meals.service";
+import { ListItemComponent } from './components/list-item/list-item.component';
 
 @NgModule({
-    imports: [],
-    declarations: [],
+  imports: [
+    CommonModule,
+    RouterModule,
+    AngularFireDatabaseModule,
+    
+  ],
+  declarations: [
+    ListItemComponent
+  ],
+  exports: [
+    ListItemComponent
+  ]
 })
 export class SharedModule {
-    static forRoot(): ModuleWithProviders{
-        return {
-            ngModule: SharedModule,
-            providers: [MealsService]
-        }
-    }
+  static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: SharedModule,
+      providers: [MealsService]
+    };
+  }
 }

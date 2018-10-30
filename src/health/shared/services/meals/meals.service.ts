@@ -1,20 +1,28 @@
-import { Injectable } from "@angular/core";
-import { Store } from "store";
-import { AngularFireDatabase } from "angularfire2/database";
-import { AuthService } from "../../../../auth/shared/services/auth/auth.sevice";
-import { Observable } from "rxjs/Observable";
+import { Injectable } from '@angular/core';
+import { AngularFireDatabase } from 'angularfire2/database';
 
-export interface Meal{
-    name: string;
-    ingredients: string[];
-    timestamp: number;
-    $key: string;
-    $exists: () => boolean;
+import { Store } from 'store';
+
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/of';
+
+import { AuthService } from '../../../../auth/shared/services/auth/auth.sevice';
+
+export interface Meal {
+  name: string,
+  ingredients: string[],
+  timestamp: number,
+  $key: string,
+  $exists: () => boolean
 }
 
 @Injectable()
 export class MealsService {
-    meals$: Observable<any> = this.db.list(`meals/${this.uid}`)
+
+  meals$: Observable<Meal[]> = this.db.list(`meals/${this.uid}`)
     .do(next => this.store.set('meals', next));
 
   constructor(
@@ -26,4 +34,20 @@ export class MealsService {
   get uid() {
     return this.authService.user.uid;
   }
+
+  getMeal(key: string) {
+    if (!key) return Observable.of({});
+    return this.store.select<Meal[]>('meals')
+      .filter(Boolean)
+      .map(meals => meals.find((meal: Meal) => meal.$key === key));
+  }
+
+  addMeal(meal: Meal) {
+    return this.db.list(`meals/${this.uid}`).push(meal);
+  }
+
+  removeMeal(key: string) {
+    return this.db.list(`meals/${this.uid}`).remove(key);
+  }
+
 }

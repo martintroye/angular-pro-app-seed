@@ -16,7 +16,6 @@ import { Router } from '@angular/router';
     <app-nav *ngIf="(user$ | async)?.authenticated">
 
     </app-nav>
-      Hello Ultimate Angular!
       <div class="wrapper">
         <router-outlet></router-outlet>
       </div>
@@ -41,7 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = this.authService.auth$.subscribe();
     this.user$ = this.store.select<User>('user');
-    this.router.navigate(['/auth/login']);
+    //this.router.navigate(['/auth/login']);
   }
 
   ngOnDestroy(): void {

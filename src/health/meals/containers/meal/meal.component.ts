@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Meal, MealsService } from '../../../shared/services/meals/meals.service';
+import { MealsService } from '../../../shared/services/meals/meals.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
+import { Meal } from '../../../shared/interfaces/meal';
 
 @Component({
     selector: 'meal',
@@ -23,6 +24,18 @@ export class MealComponent implements OnInit, OnDestroy {
 
     async addMeal(meal: Meal) {
         await this.mealsService.addMeal(meal);
+        this.backToMeals();
+    }
+
+    async updateMeal(meal: Meal) {
+        const key = this.route.snapshot.params.id;
+        await this.mealsService.updateMeal(key, meal);
+        this.backToMeals();
+    }
+
+    async removeMeal(meal: Meal) {
+        const key = this.route.snapshot.params.id;
+        await this.mealsService.removeMeal(key);
         this.backToMeals();
     }
 
